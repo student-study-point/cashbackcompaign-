@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cashback Campaign | Real Earning</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00c853;
+            --secondary: #1a237e;
+            --bg: #f4f7fa;
+            --white: #ffffff;
+            --nav-inactive: #9e9e9e;
+            --danger: #ff5252;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--bg); color: #333; overflow-x: hidden; height: 100vh; position: relative; }
+
+        /* Signup Page */
+        #signupPage {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, var(--secondary), #3949ab); 
+            display: flex; justify-content: center; align-items: flex-start;
+            z-index: 5000; overflow-y: auto; padding: 40px 20px;
+        }
+        .signup-card {
+            background: white; padding: 30px; border-radius: 24px;
+            width: 100%; max-width: 400px; text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3); margin-bottom: 40px;
+        }
+        .signup-logo-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px; }
+        .signup-rupee-icon { width: 42px; height: 42px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.4rem; }
+        .terms-box { margin-top: 20px; font-size: 0.65rem; color: #888; text-align: left; line-height: 1.4; border-top: 1px solid #eee; padding-top: 15px; }
+
+        /* Main App Header */
+        #mainApp { display: none; }
+        nav { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 0 5%; background: var(--white); box-shadow: 0 2px 15px rgba(0,0,0,0.05); 
+            position: sticky; top: 0; z-index: 1000; height: 65px; 
+        }
+        .nav-left { display: flex; align-items: center; }
+        .rupee-icon { width: 42px; height: 42px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.4rem; cursor: pointer; margin-right: 15px; }
+        .logo { font-size: 1.1rem; font-weight: 800; color: var(--secondary); }
+        .logo span { color: var(--primary); }
+        
+        /* Notification Icon */
+        .notif-bell { position: relative; font-size: 1.5rem; color: var(--danger); cursor: pointer; padding: 5px; }
+        .notif-badge { position: absolute; top: 2px; right: 2px; background: var(--secondary); color: white; font-size: 0.6rem; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid white; }
+
+        /* Notification Drawer */
+        #notifDrawer { position: fixed; top: 0; right: -100%; width: 100%; max-width: 350px; height: 100%; background: white; z-index: 5500; transition: 0.4s; box-shadow: -5px 0 20px rgba(0,0,0,0.1); }
+        #notifDrawer.active { right: 0; }
+        .notif-header { padding: 20px; background: var(--secondary); color: white; display: flex; justify-content: space-between; align-items: center; }
+        .notif-list { padding: 10px; overflow-y: auto; height: calc(100% - 65px); }
+        .notif-item { padding: 15px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: flex-start; gap: 12px; }
+        .notif-item i { font-size: 1.2rem; margin-top: 3px; }
+        .notif-content h5 { font-size: 0.85rem; margin-bottom: 3px; color: #333; }
+        .notif-content p { font-size: 0.75rem; color: #666; }
+
+        /* Wallet Section */
+        .wallet-section { padding: 30px 20px; background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%); border-radius: 0 0 35px 35px; text-align: center; }
+        .profit-card { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 20px; padding: 20px; border: 1px solid rgba(255, 255, 255, 0.1); width: 100%; max-width: 320px; display: inline-block; }
+        .live-tag { color: #00c853; font-size: 0.65rem; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .dot { width: 6px; height: 6px; background: #00c853; border-radius: 50%; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+        .balance-val { font-size: 2.4rem; font-weight: 800; color: white; margin-bottom: 10px; }
+        .complete-task-btn { background: var(--white); color: var(--secondary); padding: 8px 20px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; display: inline-block; text-decoration: none; cursor: pointer; }
+
+        /* Privacy Policy Modal */
+        #policyModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 6000; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal-content { background: white; padding: 25px; border-radius: 20px; max-width: 400px; width: 100%; max-height: 80vh; overflow-y: auto; position: relative; }
+
+        /* Other Styles */
+        .task-card { display: flex; align-items: center; padding: 15px; margin: 12px 20px; background: white; border-radius: 16px; border: 1px solid #eee; }
+        .task-img { width: 48px; height: 48px; border-radius: 12px; margin-right: 15px; object-fit: contain; }
+        .bottom-bar { position: fixed; bottom: 0; width: 100%; max-width: 500px; background: white; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #efefef; left: 50%; transform: translateX(-50%); z-index: 2000; }
+        .nav-item { text-align: center; font-size: 0.65rem; color: var(--nav-inactive); cursor: pointer; flex: 1; font-weight: 500; }
+        .nav-item i { font-size: 1.3rem; margin-bottom: 4px; display: block; }
+        .nav-item.active { color: var(--primary); }
+        .signup-btn { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; }
+        .view { display: none; padding-bottom: 90px; }
+        .view.active { display: block; }
+        .overlay-bg { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); z-index:5400; display:none; }
+    </style>
+</head>
+<body>
+
+    <div id="signupPage">
+        <div class="signup-card">
+            <div class="signup-logo-container">
+                <div class="signup-rupee-icon">₹</div>
+                <h2 style="color: var(--secondary); font-size: 1.6rem;"><span style="color: var(--primary);">Campaign</span></h2>
+            </div>
+            <p style="color:#777; font-size: 0.85rem; margin-bottom: 25px;">Create your account to start earning</p>
+            <div style="text-align: left;">
+                <label style="font-size: 0.75rem; font-weight: 700; color: #555;">Full Name</label>
+                <input type="text" id="userNameInput" style="width:100%; padding:14px; margin:6px 0 18px; border:1.5px solid #eee; border-radius:10px; outline: none;" placeholder="e.g. Rahul Kumar">
+                <label style="font-size: 0.75rem; font-weight: 700; color: #555;">Mobile Number</label>
+                <input type="number" id="userPhoneInput" style="width:100%; padding:14px; margin:6px 0 25px; border:1.5px solid #eee; border-radius:10px; outline: none;" placeholder="10 Digit Mobile Number">
+            </div>
+            <button class="signup-btn" onclick="handleSignup()">Get Started Now</button>
+            <div class="terms-box">
+                <b>Terms & Conditions:</b><br>
+                1. Earnings are based on task verification.<br>
+                2. Referral rewards are added after first task completion.
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay-bg" id="notifOverlay" onclick="toggleNotif()"></div>
+    <div id="notifDrawer">
+        <div class="notif-header">
+            <h4>Notifications</h4>
+            <i class="fa-solid fa-xmark" onclick="toggleNotif()" style="cursor:pointer; font-size: 1.2rem;"></i>
+        </div>
+        <div class="notif-list">
+            <div class="notif-item">
+                <i class="fa-solid fa-bolt" style="color: #FFD700;"></i>
+                <div class="notif-content">
+                    <h5>Navi App Bonus</h5>
+                    <p>Complete Navi task now and get extra ₹50 bonus instant.</p>
+                </div>
+            </div>
+            <div class="notif-item">
+                <i class="fa-solid fa-mobile-screen-button" style="color: #673ab7;"></i>
+                <div class="notif-content">
+                    <h5>PhonePe Cashback</h5>
+                    <p>Flat ₹150 cashback verified for your next PhonePe transaction.</p>
+                </div>
+            </div>
+            <div class="notif-item">
+                <i class="fa-solid fa-wallet" style="color: #00baf2;"></i>
+                <div class="notif-content">
+                    <h5>Paytm Task Live</h5>
+                    <p>New Paytm wallet task added. Earn ₹80 within 5 minutes.</p>
+                </div>
+            </div>
+            <div class="notif-item">
+                <i class="fa-brands fa-google-pay" style="color: #4285f4;"></i>
+                <div class="notif-content">
+                    <h5>GPay Referral Offer</h5>
+                    <p>Refer 5 friends to GPay and earn extra rewards from us.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="policyModal">
+        <div class="modal-content">
+            <span onclick="closePolicy()" style="position: absolute; top: 15px; right: 15px; font-size: 1.5rem; cursor: pointer;">&times;</span>
+            <h2 style="color: var(--primary); font-size: 1.3rem;">Privacy Policy</h2>
+            <div style="font-size: 0.85rem; color: #555; line-height: 1.5; margin-top: 15px;">
+                <p><b>Referral:</b> Rewards are credited only after the referred user completes a task.</p>
+                <p><b>App Earning:</b> Task completion must follow all steps for valid cashback.</p>
+                <p><b>Security:</b> We do not share your private data with third parties.</p>
+            </div>
+            <button class="signup-btn" style="margin-top: 20px;" onclick="closePolicy()">I Understand</button>
+        </div>
+    </div>
+
+    <div id="mainApp">
+        <nav>
+            <div class="nav-left">
+                <div class="rupee-icon">₹</div>
+                <div class="logo">Cashback <span>Campaign</span></div>
+            </div>
+            <div class="notif-bell" onclick="toggleNotif()">
+                <i class="fa-solid fa-bell"></i>
+                <div class="notif-badge">4</div>
+            </div>
+        </nav>
+
+        <div id="homeView" class="view active">
+            <div class="wallet-section">
+                <div class="profit-card">
+                    <div class="live-tag"><span class="dot"></span> Live User Profit</div>
+                    <div class="balance-val">₹<span id="globalProfit">12,45,000</span></div>
+                    <div class="complete-task-btn" onclick="switchView('tasksView', document.querySelectorAll('.nav-item')[1])">
+                        <i class="fa-solid fa-circle-check"></i> Complete task and earn
+                    </div>
+                </div>
+            </div>
+            <h4 style="margin: 25px 20px 10px; font-size: 1rem; color: var(--secondary); font-weight: 700;">Recommended Tasks</h4>
+            <div id="homeTasks"></div>
+        </div>
+
+        <div id="tasksView" class="view">
+            <h4 style="padding: 20px; font-size: 1.1rem; font-weight: 700;">Explore All Tasks</h4>
+            <div id="allTasks"></div>
+        </div>
+
+        <div id="referView" class="view">
+            <div style="padding: 50px 20px; text-align: center;">
+                <i class="fa-solid fa-share-nodes" style="font-size: 3rem; color: var(--primary); margin-bottom: 20px;"></i>
+                <h3>Refer & Earn</h3>
+                <p style="color: #666; margin-bottom: 30px;">Invite friends and get more task rewards.</p>
+                <div style="background:#f9f9f9; padding:18px; border-radius:15px; font-weight:700; border: 2px dashed var(--primary); color: var(--secondary);">CB-PRO-2026</div>
+                <button class="signup-btn" style="margin-top: 25px;" onclick="alert('Link Copied!')">Copy Invite Link</button>
+            </div>
+        </div>
+
+        <div id="profileView" class="view">
+            <div style="text-align: center; padding: 40px 20px;">
+                <div style="width:80px; height:80px; background:#e8eaf6; border-radius:50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: var(--secondary);"><i class="fa-solid fa-user"></i></div>
+                <h2 id="profName">User Name</h2>
+                <p id="profPhone" style="color: #888;">+91 0000000000</p>
+            </div>
+            <div style="padding: 20px;">
+                <div onclick="openPolicy()" style="background:white; padding:15px; border-radius:12px; margin-bottom:10px; cursor:pointer; display:flex; align-items:center; gap:15px; border:1px solid #eee;">
+                    <i class="fa-solid fa-shield-halved" style="color: var(--secondary);"></i> Privacy Policy
+                </div>
+                <button class="signup-btn" style="background:#ff5252; margin-top:20px;" onclick="handleSignOut()">Logout</button>
+            </div>
+        </div>
+
+        <div class="bottom-bar">
+            <div class="nav-item active" onclick="switchView('homeView', this)"><i class="fa-solid fa-house"></i>Home</div>
+            <div class="nav-item" onclick="switchView('tasksView', this)"><i class="fa-solid fa-layer-group"></i>Tasks</div>
+            <div class="nav-item" onclick="switchView('referView', this)"><i class="fa-solid fa-user-plus"></i>Refer</div>
+            <div class="nav-item" onclick="switchView('profileView', this)"><i class="fa-solid fa-circle-user"></i>Profile</div>
+        </div>
+    </div>
+
+    <script>
+        const taskList = [
+            { name: "Navi App", amt: 250, img: "https://logo.clearbit.com/navi.com" },
+            { name: "Google Pay", amt: 100, img: "https://logo.clearbit.com/google.com" },
+            { name: "PhonePe", amt: 150, img: "https://logo.clearbit.com/phonepe.com" },
+            { name: "Paytm Cash", amt: 80, img: "https://logo.clearbit.com/paytm.com" },
+            { name: "Amazon Shopping", amt: 150, img: "https://logo.clearbit.com/amazon.in" }
+        ];
+
+        function toggleNotif() {
+            const drawer = document.getElementById('notifDrawer');
+            const overlay = document.getElementById('notifOverlay');
+            if(drawer.classList.contains('active')) {
+                drawer.classList.remove('active');
+                overlay.style.display = 'none';
+            } else {
+                drawer.classList.add('active');
+                overlay.style.display = 'block';
+            }
+        }
+
+        function handleSignup() {
+            const name = document.getElementById('userNameInput').value;
+            const phone = document.getElementById('userPhoneInput').value;
+            if(name.length < 3 || phone.length < 10) return alert("Enter valid details");
+            localStorage.setItem('cb_session', JSON.stringify({name, phone}));
+            showMain(name, phone);
+        }
+
+        function showMain(name, phone) {
+            document.getElementById('signupPage').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            document.getElementById('profName').innerText = name;
+            document.getElementById('profPhone').innerText = "+91 " + phone;
+        }
+
+        function renderTasks() {
+            const h = document.getElementById('homeTasks');
+            const a = document.getElementById('allTasks');
+            taskList.forEach((t, i) => {
+                const card = `<div class="task-card"><img src="${t.img}" class="task-img"><div style="flex:1"><h4>${t.name}</h4><p style="color:var(--primary); font-size:0.75rem;">Earn ₹${t.amt}</p></div><button style="border:none; background:var(--secondary); color:white; padding:7px 15px; border-radius:8px; font-size:0.75rem;" onclick="alert('Redirecting...')">Claim</button></div>`;
+                if(i < 4) h.innerHTML += card;
+                a.innerHTML += card;
+            });
+        }
+
+        function switchView(viewId, el) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function openPolicy() { document.getElementById('policyModal').style.display = 'flex'; }
+        function closePolicy() { document.getElementById('policyModal').style.display = 'none'; }
+        function handleSignOut() { localStorage.removeItem('cb_session'); location.reload(); }
+
+        window.onload = () => {
+            const session = localStorage.getItem('cb_session');
+            if(session) { const u = JSON.parse(session); showMain(u.name, u.phone); }
+            renderTasks();
+            setInterval(() => {
+                let p = parseInt(document.getElementById('globalProfit').innerText.replace(/,/g, ''));
+                document.getElementById('globalProfit').innerText = (p + Math.floor(Math.random()*500)).toLocaleString('en-IN');
+            }, 3000);
+        };
+    </script>
+</body>
+</html>
