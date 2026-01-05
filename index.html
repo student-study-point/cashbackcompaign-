@@ -199,7 +199,7 @@
                 <h3>Refer & Earn</h3>
                 <p style="color: #666; margin-bottom: 30px;">Invite friends and get more task rewards.</p>
                 <div style="background:#f9f9f9; padding:18px; border-radius:15px; font-weight:700; border: 2px dashed var(--primary); color: var(--secondary);">CB-PRO-2026</div>
-                <button class="signup-btn" style="margin-top: 25px;" onclick="alert('Link Copied!')">Copy Invite Link</button>
+                <button class="signup-btn" style="margin-top: 25px;" onclick="copyReferLink()">Copy Invite Link</button>
             </div>
         </div>
 
@@ -218,20 +218,39 @@
         </div>
 
         <div class="bottom-bar">
-            <div class="nav-item active" onclick="switchView('homeView', this)"><i class="fa-solid fa-house"></i>Home</div>
-            <div class="nav-item" onclick="switchView('tasksView', this)"><i class="fa-solid fa-layer-group"></i>Tasks</div>
-            <div class="nav-item" onclick="switchView('referView', this)"><i class="fa-solid fa-user-plus"></i>Refer</div>
-            <div class="nav-item" onclick="switchView('profileView', this)"><i class="fa-solid fa-circle-user"></i>Profile</div>
+            <div class="nav-item active" id="nav-homeView" onclick="switchView('homeView', this)"><i class="fa-solid fa-house"></i>Home</div>
+            <div class="nav-item" id="nav-tasksView" onclick="switchView('tasksView', this)"><i class="fa-solid fa-layer-group"></i>Tasks</div>
+            <div class="nav-item" id="nav-referView" onclick="switchView('referView', this)"><i class="fa-solid fa-user-plus"></i>Refer</div>
+            <div class="nav-item" id="nav-profileView" onclick="switchView('profileView', this)"><i class="fa-solid fa-circle-user"></i>Profile</div>
         </div>
     </div>
 
     <script>
         const taskList = [
-            { name: "Navi App", amt: 250, img: "https://logo.clearbit.com/navi.com" },
-            { name: "Google Pay", amt: 100, img: "https://logo.clearbit.com/google.com" },
-            { name: "PhonePe", amt: 150, img: "https://logo.clearbit.com/phonepe.com" },
-            { name: "Paytm Cash", amt: 80, img: "https://logo.clearbit.com/paytm.com" },
-            { name: "Amazon Shopping", amt: 150, img: "https://logo.clearbit.com/amazon.in" }
+            { 
+                name: "Navi App", 
+                amt: 250, 
+                img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8SUnHq-X0VvC15P88lW803k856rK1n6M4_w&s", 
+                link: "https://r.navi.com/2sB8xB" 
+            },
+            { 
+                name: "Google Pay", 
+                amt: 100, 
+                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/512px-Google_Pay_Logo.svg.png", 
+                link: "https://g.co/payinvite/5d1ru0n" 
+            },
+            { 
+                name: "PhonePe", 
+                amt: 150, 
+                img: "https://download.logo.wine/logo/PhonePe/PhonePe-Logo.wine.png", 
+                link: "https://phon.pe/xhsix8el" 
+            },
+            { 
+                name: "Paytm Cash", 
+                amt: 80, 
+                img: "https://download.logo.wine/logo/Paytm/Paytm-Logo.wine.png", 
+                link: "https://p.paytm.me/xCTH/xa0azynq?utmt=010519" 
+            }
         ];
 
         function toggleNotif() {
@@ -243,8 +262,22 @@
             } else {
                 drawer.classList.add('active');
                 overlay.style.display = 'block';
+                history.pushState({view: 'notif'}, ''); 
             }
         }
+
+        window.addEventListener('popstate', function(event) {
+            const drawer = document.getElementById('notifDrawer');
+            if(drawer.classList.contains('active')) {
+                drawer.classList.remove('active');
+                document.getElementById('notifOverlay').style.display = 'none';
+                return;
+            }
+            const currentView = document.querySelector('.view.active').id;
+            if (currentView !== 'homeView') {
+                switchView('homeView', document.getElementById('nav-homeView'));
+            }
+        });
 
         function handleSignup() {
             const name = document.getElementById('userNameInput').value;
@@ -264,18 +297,32 @@
         function renderTasks() {
             const h = document.getElementById('homeTasks');
             const a = document.getElementById('allTasks');
+            h.innerHTML = '';
+            a.innerHTML = '';
             taskList.forEach((t, i) => {
-                const card = `<div class="task-card"><img src="${t.img}" class="task-img"><div style="flex:1"><h4>${t.name}</h4><p style="color:var(--primary); font-size:0.75rem;">Earn ₹${t.amt}</p></div><button style="border:none; background:var(--secondary); color:white; padding:7px 15px; border-radius:8px; font-size:0.75rem;" onclick="alert('Redirecting...')">Claim</button></div>`;
+                const card = `<div class="task-card"><img src="${t.img}" class="task-img"><div style="flex:1"><h4>${t.name}</h4><p style="color:var(--primary); font-size:0.75rem;">Earn upto ₹${t.amt}</p></div><button style="border:none; background:var(--secondary); color:white; padding:7px 15px; border-radius:8px; font-size:0.75rem;" onclick="window.open('${t.link}', '_blank')">Claim</button></div>`;
                 if(i < 4) h.innerHTML += card;
                 a.innerHTML += card;
             });
         }
 
         function switchView(viewId, el) {
+            if (viewId !== 'homeView') {
+                history.pushState({view: viewId}, '');
+            }
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             el.classList.add('active');
+        }
+
+        function copyReferLink() {
+            const link = "https://bit.ly/4pppHbZ";
+            navigator.clipboard.writeText(link).then(() => {
+                alert("Invite link copied successfully!");
+            }).catch(err => {
+                console.error('Failed to copy link: ', err);
+            });
         }
 
         function openPolicy() { document.getElementById('policyModal').style.display = 'flex'; }
@@ -294,3 +341,4 @@
     </script>
 </body>
 </html>
+
