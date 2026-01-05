@@ -19,17 +19,22 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: var(--bg); color: #333; overflow-x: hidden; height: 100vh; position: relative; }
 
-        /* Signup Page */
+        /* Signup Page - Centered Layout */
         #signupPage {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(135deg, var(--secondary), #3949ab); 
-            display: flex; justify-content: center; align-items: flex-start;
-            z-index: 5000; overflow-y: auto; padding: 40px 20px;
+            display: flex; justify-content: center; align-items: center; /* Center horizontally & vertically */
+            z-index: 5000; padding: 20px;
         }
         .signup-card {
-            background: white; padding: 30px; border-radius: 24px;
-            width: 100%; max-width: 400px; text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3); margin-bottom: 40px;
+            background: white; padding: 35px 25px; border-radius: 28px;
+            width: 100%; max-width: 380px; text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+            animation: slideUp 0.5s ease-out; /* Smooth entrance */
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .signup-logo-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px; }
         .signup-rupee-icon { width: 42px; height: 42px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.4rem; }
@@ -47,10 +52,6 @@
         .logo { font-size: 1.1rem; font-weight: 800; color: var(--secondary); }
         .logo span { color: var(--primary); }
         
-        /* Notification Icon */
-        .notif-bell { position: relative; font-size: 1.5rem; color: var(--danger); cursor: pointer; padding: 5px; }
-        .notif-badge { position: absolute; top: 2px; right: 2px; background: var(--secondary); color: white; font-size: 0.6rem; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid white; }
-
         /* Notification Drawer */
         #notifDrawer { position: fixed; top: 0; right: -100%; width: 100%; max-width: 350px; height: 100%; background: white; z-index: 5500; transition: 0.4s; box-shadow: -5px 0 20px rgba(0,0,0,0.1); }
         #notifDrawer.active { right: 0; }
@@ -61,7 +62,7 @@
         .notif-content h5 { font-size: 0.85rem; margin-bottom: 3px; color: #333; }
         .notif-content p { font-size: 0.75rem; color: #666; }
 
-        /* Wallet Section */
+        /* Wallet & Profit Section */
         .wallet-section { padding: 30px 20px; background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%); border-radius: 0 0 35px 35px; text-align: center; }
         .profit-card { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 20px; padding: 20px; border: 1px solid rgba(255, 255, 255, 0.1); width: 100%; max-width: 320px; display: inline-block; }
         .live-tag { color: #00c853; font-size: 0.65rem; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 5px; }
@@ -74,14 +75,19 @@
         #policyModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 6000; display: none; align-items: center; justify-content: center; padding: 20px; }
         .modal-content { background: white; padding: 25px; border-radius: 20px; max-width: 400px; width: 100%; max-height: 80vh; overflow-y: auto; position: relative; }
 
-        /* Other Styles */
+        /* Task Cards */
         .task-card { display: flex; align-items: center; padding: 15px; margin: 12px 20px; background: white; border-radius: 16px; border: 1px solid #eee; }
         .task-img { width: 48px; height: 48px; border-radius: 12px; margin-right: 15px; object-fit: contain; }
+        
+        /* Bottom Navbar */
         .bottom-bar { position: fixed; bottom: 0; width: 100%; max-width: 500px; background: white; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #efefef; left: 50%; transform: translateX(-50%); z-index: 2000; }
         .nav-item { text-align: center; font-size: 0.65rem; color: var(--nav-inactive); cursor: pointer; flex: 1; font-weight: 500; }
         .nav-item i { font-size: 1.3rem; margin-bottom: 4px; display: block; }
         .nav-item.active { color: var(--primary); }
-        .signup-btn { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; }
+        
+        /* Buttons & Inputs */
+        .signup-btn { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .signup-btn:active { transform: scale(0.95); }
         .view { display: none; padding-bottom: 90px; }
         .view.active { display: block; }
         .overlay-bg { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); z-index:5400; display:none; }
@@ -96,69 +102,22 @@
                 <h2 style="color: var(--secondary); font-size: 1.6rem;"><span style="color: var(--primary);">Campaign</span></h2>
             </div>
             <p style="color:#777; font-size: 0.85rem; margin-bottom: 25px;">Create your account to start earning</p>
+            
             <div style="text-align: left;">
                 <label style="font-size: 0.75rem; font-weight: 700; color: #555;">Full Name</label>
                 <input type="text" id="userNameInput" style="width:100%; padding:14px; margin:6px 0 18px; border:1.5px solid #eee; border-radius:10px; outline: none;" placeholder="e.g. Rahul Kumar">
+                
                 <label style="font-size: 0.75rem; font-weight: 700; color: #555;">Mobile Number</label>
                 <input type="number" id="userPhoneInput" style="width:100%; padding:14px; margin:6px 0 25px; border:1.5px solid #eee; border-radius:10px; outline: none;" placeholder="10 Digit Mobile Number">
             </div>
+            
             <button class="signup-btn" onclick="handleSignup()">Get Started Now</button>
+            
             <div class="terms-box">
                 <b>Terms & Conditions:</b><br>
                 1. Earnings are based on task verification.<br>
                 2. Referral rewards are added after first task completion.
             </div>
-        </div>
-    </div>
-
-    <div class="overlay-bg" id="notifOverlay" onclick="toggleNotif()"></div>
-    <div id="notifDrawer">
-        <div class="notif-header">
-            <h4>Notifications</h4>
-            <i class="fa-solid fa-xmark" onclick="toggleNotif()" style="cursor:pointer; font-size: 1.2rem;"></i>
-        </div>
-        <div class="notif-list">
-            <div class="notif-item">
-                <i class="fa-solid fa-bolt" style="color: #FFD700;"></i>
-                <div class="notif-content">
-                    <h5>Navi App Bonus</h5>
-                    <p>Complete Navi task now and get extra ₹50 bonus instant.</p>
-                </div>
-            </div>
-            <div class="notif-item">
-                <i class="fa-solid fa-mobile-screen-button" style="color: #673ab7;"></i>
-                <div class="notif-content">
-                    <h5>PhonePe Cashback</h5>
-                    <p>Flat ₹150 cashback verified for your next PhonePe transaction.</p>
-                </div>
-            </div>
-            <div class="notif-item">
-                <i class="fa-solid fa-wallet" style="color: #00baf2;"></i>
-                <div class="notif-content">
-                    <h5>Paytm Task Live</h5>
-                    <p>New Paytm wallet task added. Earn ₹80 within 5 minutes.</p>
-                </div>
-            </div>
-            <div class="notif-item">
-                <i class="fa-brands fa-google-pay" style="color: #4285f4;"></i>
-                <div class="notif-content">
-                    <h5>GPay Referral Offer</h5>
-                    <p>Refer 5 friends to GPay and earn extra rewards from us.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="policyModal">
-        <div class="modal-content">
-            <span onclick="closePolicy()" style="position: absolute; top: 15px; right: 15px; font-size: 1.5rem; cursor: pointer;">&times;</span>
-            <h2 style="color: var(--primary); font-size: 1.3rem;">Privacy Policy</h2>
-            <div style="font-size: 0.85rem; color: #555; line-height: 1.5; margin-top: 15px;">
-                <p><b>Referral:</b> Rewards are credited only after the referred user completes a task.</p>
-                <p><b>App Earning:</b> Task completion must follow all steps for valid cashback.</p>
-                <p><b>Security:</b> We do not share your private data with third parties.</p>
-            </div>
-            <button class="signup-btn" style="margin-top: 20px;" onclick="closePolicy()">I Understand</button>
         </div>
     </div>
 
@@ -168,9 +127,9 @@
                 <div class="rupee-icon">₹</div>
                 <div class="logo">Cashback <span>Campaign</span></div>
             </div>
-            <div class="notif-bell" onclick="toggleNotif()">
+            <div class="notif-bell" onclick="toggleNotif()" style="position: relative; font-size: 1.5rem; color: var(--danger); cursor: pointer;">
                 <i class="fa-solid fa-bell"></i>
-                <div class="notif-badge">4</div>
+                <div style="position: absolute; top: 2px; right: 2px; background: var(--secondary); color: white; font-size: 0.6rem; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid white;">4</div>
             </div>
         </nav>
 
@@ -225,12 +184,31 @@
         </div>
     </div>
 
+    <div class="overlay-bg" id="notifOverlay" onclick="toggleNotif()"></div>
+    <div id="notifDrawer">
+        <div class="notif-header">
+            <h4>Notifications</h4>
+            <i class="fa-solid fa-xmark" onclick="toggleNotif()" style="cursor:pointer; font-size: 1.2rem;"></i>
+        </div>
+        <div class="notif-list">
+            <div class="notif-item">
+                <i class="fa-solid fa-bolt" style="color: #FFD700;"></i>
+                <div class="notif-content"><h5>Navi App Bonus</h5><p>Complete Navi task now and get extra ₹50 bonus.</p></div>
+            </div>
+            <div class="notif-item">
+                <i class="fa-solid fa-mobile-screen-button" style="color: #673ab7;"></i>
+                <div class="notif-content"><h5>PhonePe Cashback</h5><p>Flat ₹150 cashback verified for next transaction.</p></div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // List of tasks with fixed Navi image URL
         const taskList = [
             { 
                 name: "Navi App", 
                 amt: 250, 
-                img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8SUnHq-X0VvC15P88lW803k856rK1n6M4_w&s", 
+                img: "https://www.navi.com/favicon.ico", 
                 link: "https://r.navi.com/2sB8xB" 
             },
             { 
@@ -253,32 +231,6 @@
             }
         ];
 
-        function toggleNotif() {
-            const drawer = document.getElementById('notifDrawer');
-            const overlay = document.getElementById('notifOverlay');
-            if(drawer.classList.contains('active')) {
-                drawer.classList.remove('active');
-                overlay.style.display = 'none';
-            } else {
-                drawer.classList.add('active');
-                overlay.style.display = 'block';
-                history.pushState({view: 'notif'}, ''); 
-            }
-        }
-
-        window.addEventListener('popstate', function(event) {
-            const drawer = document.getElementById('notifDrawer');
-            if(drawer.classList.contains('active')) {
-                drawer.classList.remove('active');
-                document.getElementById('notifOverlay').style.display = 'none';
-                return;
-            }
-            const currentView = document.querySelector('.view.active').id;
-            if (currentView !== 'homeView') {
-                switchView('homeView', document.getElementById('nav-homeView'));
-            }
-        });
-
         function handleSignup() {
             const name = document.getElementById('userNameInput').value;
             const phone = document.getElementById('userPhoneInput').value;
@@ -297,36 +249,32 @@
         function renderTasks() {
             const h = document.getElementById('homeTasks');
             const a = document.getElementById('allTasks');
-            h.innerHTML = '';
-            a.innerHTML = '';
+            h.innerHTML = ''; a.innerHTML = '';
             taskList.forEach((t, i) => {
-                const card = `<div class="task-card"><img src="${t.img}" class="task-img"><div style="flex:1"><h4>${t.name}</h4><p style="color:var(--primary); font-size:0.75rem;">Earn upto ₹${t.amt}</p></div><button style="border:none; background:var(--secondary); color:white; padding:7px 15px; border-radius:8px; font-size:0.75rem;" onclick="window.open('${t.link}', '_blank')">Claim</button></div>`;
+                const card = `<div class="task-card"><img src="${t.img}" class="task-img" onerror="this.src='https://cdn-icons-png.flaticon.com/512/5968/5968279.png'"><div style="flex:1"><h4>${t.name}</h4><p style="color:var(--primary); font-size:0.75rem;">Earn upto ₹${t.amt}</p></div><button style="border:none; background:var(--secondary); color:white; padding:7px 15px; border-radius:8px; font-size:0.75rem;" onclick="window.open('${t.link}', '_blank')">Claim</button></div>`;
                 if(i < 4) h.innerHTML += card;
                 a.innerHTML += card;
             });
         }
 
         function switchView(viewId, el) {
-            if (viewId !== 'homeView') {
-                history.pushState({view: viewId}, '');
-            }
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             el.classList.add('active');
         }
 
-        function copyReferLink() {
-            const link = "https://bit.ly/4pppHbZ";
-            navigator.clipboard.writeText(link).then(() => {
-                alert("Invite link copied successfully!");
-            }).catch(err => {
-                console.error('Failed to copy link: ', err);
-            });
+        function toggleNotif() {
+            const drawer = document.getElementById('notifDrawer');
+            const overlay = document.getElementById('notifOverlay');
+            drawer.classList.toggle('active');
+            overlay.style.display = drawer.classList.contains('active') ? 'block' : 'none';
         }
 
-        function openPolicy() { document.getElementById('policyModal').style.display = 'flex'; }
-        function closePolicy() { document.getElementById('policyModal').style.display = 'none'; }
+        function copyReferLink() {
+            navigator.clipboard.writeText("https://bit.ly/4pppHbZ").then(() => alert("Copied!"));
+        }
+
         function handleSignOut() { localStorage.removeItem('cb_session'); location.reload(); }
 
         window.onload = () => {
@@ -341,4 +289,3 @@
     </script>
 </body>
 </html>
-
