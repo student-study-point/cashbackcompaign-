@@ -230,6 +230,15 @@
             { name: "Paytm Cash", amt: 80, img: "https://download.logo.wine/logo/Paytm/Paytm-Logo.wine.png", link: "https://p.paytm.me/xCTH/xa0azynq?utmt=010519" }
         ];
 
+        // --- Back Gesture Logic ---
+        window.onpopstate = function(event) {
+            const activeView = document.querySelector('.view.active').id;
+            if (activeView !== 'homeView') {
+                // Home par wapas bhejein
+                switchView('homeView', document.getElementById('nav-homeView'), false);
+            }
+        };
+
         function handleSignup() {
             const name = document.getElementById('userNameInput').value;
             const phone = document.getElementById('userPhoneInput').value;
@@ -243,6 +252,8 @@
             document.getElementById('mainApp').style.display = 'block';
             document.getElementById('profName').innerText = name;
             document.getElementById('profPhone').innerText = "+91 " + phone;
+            // Home state push karein
+            history.pushState({view: 'homeView'}, "");
         }
 
         function renderTasks() {
@@ -255,11 +266,16 @@
             });
         }
 
-        function switchView(viewId, el) {
+        function switchView(viewId, el, shouldPush = true) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             if(el) el.classList.add('active');
+            
+            // Back gesture ke liye history maintain karein
+            if(shouldPush && viewId !== 'homeView') {
+                history.pushState({view: viewId}, "");
+            }
         }
 
         function toggleNotif() {
@@ -279,7 +295,6 @@
         function handleSignOut() {
             if(confirm("Are you sure you want to logout?")) {
                 localStorage.removeItem('cb_session');
-                // Page reload will hide mainApp and show signupPage because session is gone
                 window.location.reload(); 
             }
         }
