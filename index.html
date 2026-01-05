@@ -19,18 +19,18 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: var(--bg); color: #333; overflow-x: hidden; height: 100vh; position: relative; }
 
-        /* Signup Page - Centered Layout */
+        /* Signup Page */
         #signupPage {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(135deg, var(--secondary), #3949ab); 
-            display: flex; justify-content: center; align-items: center; /* Center horizontally & vertically */
+            display: flex; justify-content: center; align-items: center; 
             z-index: 5000; padding: 20px;
         }
         .signup-card {
             background: white; padding: 35px 25px; border-radius: 28px;
             width: 100%; max-width: 380px; text-align: center;
             box-shadow: 0 25px 50px rgba(0,0,0,0.4);
-            animation: slideUp 0.5s ease-out; /* Smooth entrance */
+            animation: slideUp 0.5s ease-out;
         }
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(30px); }
@@ -38,7 +38,6 @@
         }
         .signup-logo-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px; }
         .signup-rupee-icon { width: 42px; height: 42px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.4rem; }
-        .terms-box { margin-top: 20px; font-size: 0.65rem; color: #888; text-align: left; line-height: 1.4; border-top: 1px solid #eee; padding-top: 15px; }
 
         /* Main App Header */
         #mainApp { display: none; }
@@ -58,11 +57,11 @@
         .notif-header { padding: 20px; background: var(--secondary); color: white; display: flex; justify-content: space-between; align-items: center; }
         .notif-list { padding: 10px; overflow-y: auto; height: calc(100% - 65px); }
         .notif-item { padding: 15px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: flex-start; gap: 12px; }
-        .notif-item i { font-size: 1.2rem; margin-top: 3px; }
+        .notif-item i { font-size: 1.2rem; margin-top: 3px; color: var(--primary); }
         .notif-content h5 { font-size: 0.85rem; margin-bottom: 3px; color: #333; }
         .notif-content p { font-size: 0.75rem; color: #666; }
 
-        /* Wallet & Profit Section */
+        /* Wallet Section */
         .wallet-section { padding: 30px 20px; background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%); border-radius: 0 0 35px 35px; text-align: center; }
         .profit-card { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 20px; padding: 20px; border: 1px solid rgba(255, 255, 255, 0.1); width: 100%; max-width: 320px; display: inline-block; }
         .live-tag { color: #00c853; font-size: 0.65rem; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 5px; }
@@ -70,10 +69,6 @@
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
         .balance-val { font-size: 2.4rem; font-weight: 800; color: white; margin-bottom: 10px; }
         .complete-task-btn { background: var(--white); color: var(--secondary); padding: 8px 20px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; display: inline-block; text-decoration: none; cursor: pointer; }
-
-        /* Privacy Policy Modal */
-        #policyModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 6000; display: none; align-items: center; justify-content: center; padding: 20px; }
-        .modal-content { background: white; padding: 25px; border-radius: 20px; max-width: 400px; width: 100%; max-height: 80vh; overflow-y: auto; position: relative; }
 
         /* Task Cards */
         .task-card { display: flex; align-items: center; padding: 15px; margin: 12px 20px; background: white; border-radius: 16px; border: 1px solid #eee; }
@@ -91,9 +86,17 @@
         .view { display: none; padding-bottom: 90px; }
         .view.active { display: block; }
         .overlay-bg { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); z-index:5400; display:none; }
+
+        .privacy-card { background: white; margin: 20px; padding: 20px; border-radius: 15px; border: 1px solid #eee; text-align: left; }
+        .privacy-card h4 { font-size: 0.9rem; color: var(--secondary); margin-bottom: 10px; }
+        .privacy-card p { font-size: 0.7rem; color: #666; line-height: 1.5; margin-bottom: 8px; }
+
+        #toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 10px 20px; border-radius: 20px; font-size: 0.8rem; display: none; z-index: 6000; }
     </style>
 </head>
 <body>
+
+    <div id="toast">Copied Successfully!</div>
 
     <div id="signupPage">
         <div class="signup-card">
@@ -102,22 +105,13 @@
                 <h2 style="color: var(--secondary); font-size: 1.6rem;"><span style="color: var(--primary);">Campaign</span></h2>
             </div>
             <p style="color:#777; font-size: 0.85rem; margin-bottom: 25px;">Create your account to start earning</p>
-            
             <div style="text-align: left;">
                 <label style="font-size: 0.75rem; font-weight: 700; color: #555;">Full Name</label>
                 <input type="text" id="userNameInput" style="width:100%; padding:14px; margin:6px 0 18px; border:1.5px solid #eee; border-radius:10px; outline: none;" placeholder="e.g. Rahul Kumar">
-                
                 <label style="font-size: 0.75rem; font-weight: 700; color: #555;">Mobile Number</label>
                 <input type="number" id="userPhoneInput" style="width:100%; padding:14px; margin:6px 0 25px; border:1.5px solid #eee; border-radius:10px; outline: none;" placeholder="10 Digit Mobile Number">
             </div>
-            
             <button class="signup-btn" onclick="handleSignup()">Get Started Now</button>
-            
-            <div class="terms-box">
-                <b>Terms & Conditions:</b><br>
-                1. Earnings are based on task verification.<br>
-                2. Referral rewards are added after first task completion.
-            </div>
         </div>
     </div>
 
@@ -138,7 +132,7 @@
                 <div class="profit-card">
                     <div class="live-tag"><span class="dot"></span> Live User Profit</div>
                     <div class="balance-val">₹<span id="globalProfit">12,45,000</span></div>
-                    <div class="complete-task-btn" onclick="switchView('tasksView', document.querySelectorAll('.nav-item')[1])">
+                    <div class="complete-task-btn" onclick="switchView('tasksView', document.getElementById('nav-tasksView'))">
                         <i class="fa-solid fa-circle-check"></i> Complete task and earn
                     </div>
                 </div>
@@ -163,16 +157,22 @@
         </div>
 
         <div id="profileView" class="view">
-            <div style="text-align: center; padding: 40px 20px;">
+            <div style="text-align: center; padding: 40px 20px 20px;">
                 <div style="width:80px; height:80px; background:#e8eaf6; border-radius:50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: var(--secondary);"><i class="fa-solid fa-user"></i></div>
                 <h2 id="profName">User Name</h2>
                 <p id="profPhone" style="color: #888;">+91 0000000000</p>
             </div>
-            <div style="padding: 20px;">
-                <div onclick="openPolicy()" style="background:white; padding:15px; border-radius:12px; margin-bottom:10px; cursor:pointer; display:flex; align-items:center; gap:15px; border:1px solid #eee;">
-                    <i class="fa-solid fa-shield-halved" style="color: var(--secondary);"></i> Privacy Policy
-                </div>
-                <button class="signup-btn" style="background:#ff5252; margin-top:20px;" onclick="handleSignOut()">Logout</button>
+
+            <div class="privacy-card">
+                <h4><i class="fa-solid fa-shield-halved"></i> Earning Privacy Policy</h4>
+                <p>• <b>Verification:</b> Cashback is only credited after the brand confirms a successful task completion.</p>
+                <p>• <b>Rewards:</b> All earnings are processed within 24-48 hours of task validation.</p>
+                <p>• <b>Security:</b> We do not store your bank passwords.</p>
+                <p>• <b>Referral:</b> Referral bonuses are added once the referee completes their first task.</p>
+            </div>
+
+            <div style="padding: 0 20px;">
+                <button class="signup-btn" style="background:#ff5252;" onclick="handleSignOut()">Logout Account</button>
             </div>
         </div>
 
@@ -190,45 +190,44 @@
             <h4>Notifications</h4>
             <i class="fa-solid fa-xmark" onclick="toggleNotif()" style="cursor:pointer; font-size: 1.2rem;"></i>
         </div>
-        <div class="notif-list">
+        <div class="notif-list" id="notifList">
             <div class="notif-item">
-                <i class="fa-solid fa-bolt" style="color: #FFD700;"></i>
-                <div class="notif-content"><h5>Navi App Bonus</h5><p>Complete Navi task now and get extra ₹50 bonus.</p></div>
+                <i class="fa-solid fa-circle-check"></i>
+                <div class="notif-content">
+                    <h5>Navi App Offer</h5>
+                    <p>Complete Navi task now and get ₹250 instant cashback in your wallet.</p>
+                </div>
             </div>
             <div class="notif-item">
-                <i class="fa-solid fa-mobile-screen-button" style="color: #673ab7;"></i>
-                <div class="notif-content"><h5>PhonePe Cashback</h5><p>Flat ₹150 cashback verified for next transaction.</p></div>
+                <i class="fa-solid fa-circle-check"></i>
+                <div class="notif-content">
+                    <h5>Google Pay Reward</h5>
+                    <p>Earn ₹100 by completing the Google Pay refer and earn task.</p>
+                </div>
+            </div>
+            <div class="notif-item">
+                <i class="fa-solid fa-circle-check"></i>
+                <div class="notif-content">
+                    <h5>PhonePe Cashback</h5>
+                    <p>New task available: Get ₹150 for your first transaction via PhonePe.</p>
+                </div>
+            </div>
+            <div class="notif-item">
+                <i class="fa-solid fa-circle-check"></i>
+                <div class="notif-content">
+                    <h5>Paytm Cash</h5>
+                    <p>Claim your ₹80 Paytm cash by finishing the app install task.</p>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // List of tasks with fixed Navi image URL
         const taskList = [
-            { 
-                name: "Navi App", 
-                amt: 250, 
-                img: "https://www.navi.com/favicon.ico", 
-                link: "https://r.navi.com/2sB8xB" 
-            },
-            { 
-                name: "Google Pay", 
-                amt: 100, 
-                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/512px-Google_Pay_Logo.svg.png", 
-                link: "https://g.co/payinvite/5d1ru0n" 
-            },
-            { 
-                name: "PhonePe", 
-                amt: 150, 
-                img: "https://download.logo.wine/logo/PhonePe/PhonePe-Logo.wine.png", 
-                link: "https://phon.pe/xhsix8el" 
-            },
-            { 
-                name: "Paytm Cash", 
-                amt: 80, 
-                img: "https://download.logo.wine/logo/Paytm/Paytm-Logo.wine.png", 
-                link: "https://p.paytm.me/xCTH/xa0azynq?utmt=010519" 
-            }
+            { name: "Navi App", amt: 250, img: "https://www.navi.com/favicon.ico", link: "https://r.navi.com/2sB8xB" },
+            { name: "Google Pay", amt: 100, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/512px-Google_Pay_Logo.svg.png", link: "https://g.co/payinvite/5d1ru0n" },
+            { name: "PhonePe", amt: 150, img: "https://download.logo.wine/logo/PhonePe/PhonePe-Logo.wine.png", link: "https://phon.pe/xhsix8el" },
+            { name: "Paytm Cash", amt: 80, img: "https://download.logo.wine/logo/Paytm/Paytm-Logo.wine.png", link: "https://p.paytm.me/xCTH/xa0azynq?utmt=010519" }
         ];
 
         function handleSignup() {
@@ -247,8 +246,7 @@
         }
 
         function renderTasks() {
-            const h = document.getElementById('homeTasks');
-            const a = document.getElementById('allTasks');
+            const h = document.getElementById('homeTasks'), a = document.getElementById('allTasks');
             h.innerHTML = ''; a.innerHTML = '';
             taskList.forEach((t, i) => {
                 const card = `<div class="task-card"><img src="${t.img}" class="task-img" onerror="this.src='https://cdn-icons-png.flaticon.com/512/5968/5968279.png'"><div style="flex:1"><h4>${t.name}</h4><p style="color:var(--primary); font-size:0.75rem;">Earn upto ₹${t.amt}</p></div><button style="border:none; background:var(--secondary); color:white; padding:7px 15px; border-radius:8px; font-size:0.75rem;" onclick="window.open('${t.link}', '_blank')">Claim</button></div>`;
@@ -261,29 +259,47 @@
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            el.classList.add('active');
+            if(el) el.classList.add('active');
         }
 
         function toggleNotif() {
-            const drawer = document.getElementById('notifDrawer');
-            const overlay = document.getElementById('notifOverlay');
+            const drawer = document.getElementById('notifDrawer'), overlay = document.getElementById('notifOverlay');
             drawer.classList.toggle('active');
             overlay.style.display = drawer.classList.contains('active') ? 'block' : 'none';
         }
 
         function copyReferLink() {
-            navigator.clipboard.writeText("https://bit.ly/4pppHbZ").then(() => alert("Copied!"));
+            navigator.clipboard.writeText("https://bit.ly/4pppHbZ").then(() => {
+                const toast = document.getElementById('toast');
+                toast.style.display = 'block';
+                setTimeout(() => { toast.style.display = 'none'; }, 2000);
+            });
         }
 
-        function handleSignOut() { localStorage.removeItem('cb_session'); location.reload(); }
+        function handleSignOut() {
+            if(confirm("Are you sure you want to logout?")) {
+                localStorage.removeItem('cb_session');
+                // Page reload will hide mainApp and show signupPage because session is gone
+                window.location.reload(); 
+            }
+        }
 
         window.onload = () => {
             const session = localStorage.getItem('cb_session');
-            if(session) { const u = JSON.parse(session); showMain(u.name, u.phone); }
+            if(session) { 
+                const u = JSON.parse(session); 
+                showMain(u.name, u.phone); 
+            } else {
+                document.getElementById('signupPage').style.display = 'flex';
+                document.getElementById('mainApp').style.display = 'none';
+            }
             renderTasks();
             setInterval(() => {
-                let p = parseInt(document.getElementById('globalProfit').innerText.replace(/,/g, ''));
-                document.getElementById('globalProfit').innerText = (p + Math.floor(Math.random()*500)).toLocaleString('en-IN');
+                let p_el = document.getElementById('globalProfit');
+                if(p_el) {
+                    let p = parseInt(p_el.innerText.replace(/,/g, ''));
+                    p_el.innerText = (p + Math.floor(Math.random()*500)).toLocaleString('en-IN');
+                }
             }, 3000);
         };
     </script>
