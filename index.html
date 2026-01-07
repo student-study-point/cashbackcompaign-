@@ -297,20 +297,17 @@
         }
 
         function handleSignOut() {
-            if(confirm("Are you sure you want to logout?")) {
-                localStorage.removeItem('cb_session');
-                window.location.reload(); 
-            }
+    if(confirm("Are you sure you want to logout?")) {
+        localStorage.removeItem('cb_session');
+        window.location.reload(); 
+    }
+} // <--- Check karein, handleSignOut yahan khatam hona chahiye
 
-        }
-        
-        function handleHelp() {
+function handleHelp() {
     // Yahan apna Telegram ya WhatsApp link daalein
     window.open('https://t.me/cashbackkcampaign', '_blank');
-            }
-            
-        }
-
+}
+        
         window.onload = () => {
             const session = localStorage.getItem('cb_session');
             if(session) { 
