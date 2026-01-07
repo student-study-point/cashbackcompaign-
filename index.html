@@ -262,7 +262,7 @@
             h.innerHTML = ''; a.innerHTML = '';
             taskList.forEach((t, i) => {
                 const card = `<div class="task-card"><img src="${t.img}" class="task-img" onerror="this.src='https://cdn-icons-png.flaticon.com/512/5968/5968279.png'"><div style="flex:1"><h4>${t.name}</h4><p style="color:var(--primary); font-size:0.75rem;">Earn upto ₹${t.amt}</p></div><button style="border:none; background:var(--secondary); color:white; padding:7px 15px; border-radius:8px; font-size:0.75rem;" onclick="window.open('${t.link}', '_blank')">Claim</button></div>`;
-                if(i < 4) h.innerHTML += card;
+                if(i < 5) h.innerHTML += card;
                 a.innerHTML += card;
             });
         }
